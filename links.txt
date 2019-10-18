@@ -1,0 +1,11 @@
+https://br.vuejs.org/v2/cookbook/using-axios-to-consume-apis.html
+
+https://br.vuejs.org/v2/guide/list.html
+
+http://localhost:3333/sonhos
+
+https://origamid.com/projetos/flexbox-guia-completo/
+
+https://github.com
+
+https://rocketseat.com.br/starter

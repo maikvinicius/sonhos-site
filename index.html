@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="resources/css/site.css">
+  <link href="resources/fonts/mali.css" rel="stylesheet">
+  <title>Mural do sonhos</title>
+  <script src="vue.js"></script>
+  <script src="axios.js"></script>
+</head>
+
+<body style="background: aliceblue;">
+
+  <header>
+    <h1>Mural do sonhos</h1>
+    <!-- <p>Aprendizado: https://origamid.com/projetos/flexbox-guia-completo/</p> -->
+  </header>
+
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="cadastre.html">Cadastre seu sonho</a>
+  </nav>
+
+  <row>
+
+    <main>
+
+      <div id="noticias" class="noticias">
+
+        <div v-for="sonho in sonhos">
+          <a :href="`cadastre.html?id=${sonho._id}`">
+              <div class="noticia">
+                <h1>{{sonho.titulo}}</h1>
+                <p>{{sonho.descricao}}</p>
+              </div>
+          </a>
+        </div>
+
+      </div>
+
+    </main>
+
+  </row>
+
+  <script>
+
+    var app = new Vue({
+      el: '#noticias',
+      data: {
+        sonhos: []
+      },
+      mounted() {
+        this.listSonhos()
+      },
+      methods: {
+        listSonhos: function () {
+          var self = this;
+          axios.get(`http://localhost:3333/sonhos/`).then(function (result) {
+            const { data } = result.data;
+            self.sonhos = data;
+          })
+        }
+      },
+    });
+
+  </script>
+
+</body>
+
+</html>

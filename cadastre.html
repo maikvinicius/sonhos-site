@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="resources/css/site.css">
+  <link href="resources/fonts/mali.css" rel="stylesheet">
+  <title>Mural do sonhos</title>
+  <script src="vue.js"></script>
+  <script src="axios.js"></script>
+</head>
+
+<body style="background: aliceblue;">
+
+  <header>
+    <h1>Mural do sonhos</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="cadastre.html">Cadastre seu sonho</a>
+  </nav>
+
+  <row>
+
+    <main align="center">
+
+      <div class="margin">
+        <label for="">Título</label>
+        <input type="text" id="titulo" class="input">
+      </div>
+
+      <div class="margin">
+        <label for="">Sonho</label>
+        <textarea class="input" id="sonho"></textarea>
+      </div>
+
+      <div style="margin-top:30px;display: flex;flex-direction: row;justify-content: center;">
+        <button type="submit" id="cadastrar" class="button" onclick="cadastro()">Enviar</button>
+        <button type="submit" id="deletar" class="button" style="background:red;color:white;display: none;" onclick="deletar()">Deletar</button>
+      </div>
+
+    </main>
+
+  </row>
+
+  <script>
+
+    const url_string = window.location.href
+    const url = new URL(url_string);
+    const id = url.searchParams.get('id') ? url.searchParams.get('id') : '';
+
+    if(id){
+      axios.get(`http://localhost:3333/sonhos/${id}`, {})
+        .then(function (response) {
+          console.log(response.data.data);
+          document.getElementById('titulo').value = response.data.data.titulo
+          document.getElementById('sonho').value = response.data.data.descricao
+          document.getElementById('deletar').style.display = 'block';
+          document.getElementById('cadastrar').innerHTML = 'Editar';
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+
+    function cadastro() {
+
+      if(!id){
+        axios.post('http://localhost:3333/sonhos', {
+        titulo: document.getElementById('titulo').value,
+        descricao: document.getElementById('sonho').value
+      })
+        .then(function (response) {
+          console.log(response);
+          document.getElementById('titulo').value = ""
+          document.getElementById('sonho').value = ""
+          alert("Sonho cadatrado com sucesso!");
+          window.location.href = "index.html";
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      } else {
+        axios.put(`http://localhost:3333/sonhos/${id}`, {
+        titulo: document.getElementById('titulo').value,
+        descricao: document.getElementById('sonho').value
+      })
+        .then(function (response) {
+          console.log(response);
+          alert("Sonho editado com sucesso!");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+
+    }
+
+
+
+    function deletar(){
+
+      const deletar = confirm("Você realmente deseja deletar esse sonho?");
+
+      if (deletar) {
+        axios.delete(`http://localhost:3333/sonhos/${id}`, {})
+        .then(function (response) {
+          alert("Sonho deletado com sucesso!");
+          window.location.href = "index.html";
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+
+      
+    }
+
+
+  </script>
+
+</body>
+
+</html>
